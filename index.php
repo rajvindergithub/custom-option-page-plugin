@@ -21,8 +21,16 @@ add_action('admin_menu', 'cp_add_menu_page');
 function cp_add_menu_page() {
  
     add_menu_page('Option Page Plugin', 'Theme Option', 'manage_options', 'theme-option-page','option_page_handle_function','dashicons-admin-home', 20);
+
+    add_submenu_page('theme-option-page','Menu Page', 'Menu Page', 'manage_options', 'theme-option-page','option_page_handle_function');  
+    
+    add_submenu_page('theme-option-page','Sub Menu Page', 'Sub Menu Page', 'manage_options', 'sub-theme-option-page-two','option_sub_menu_page_handle_function');    
+
 }
  
+ 
+
+//option page 
 function option_page_handle_function(){
 ?>
     <section id="option_page_wordpress_plug">
@@ -31,6 +39,14 @@ function option_page_handle_function(){
     
 <?php }
 
+ function option_sub_menu_page_handle_function(){
+     
+     ?>
 
+      <section id="option_page_wordpress_plug">
+        <div><h1>Sub Menu Page</h1></div>
+     </section>
 
+<?php }
+ 
 ?>
