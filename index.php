@@ -16,6 +16,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+define("EMS_PLUGIN_PATH", plugin_dir_path(__FILE__));
+
 add_action('admin_menu', 'cp_add_menu_page');
 
 function cp_add_menu_page() {
@@ -31,22 +33,44 @@ function cp_add_menu_page() {
  
 
 //option page 
-function option_page_handle_function(){
-?>
-    <section id="option_page_wordpress_plug">
-        <div><h1>Theme Option Page</h1></div>
-    </section>
-    
-<?php }
-
- function option_sub_menu_page_handle_function(){
-     
-     ?>
-
-      <section id="option_page_wordpress_plug">
-        <div><h1>Sub Menu Page</h1></div>
-     </section>
-
-<?php }
+function option_page_handle_function(){ 
+    require_once(EMS_PLUGIN_PATH.'includes/add-employee.php');
+}
  
+ function option_sub_menu_page_handle_function(){
+    require_once(EMS_PLUGIN_PATH.'includes/list-employee.php');
+
+ }
+ 
+//start code php
+
+
+//trigger on plugin activation
+
+register_activation_hook(__FILE__, 'create_table_data');
+
+
+function create_table_data(){
+    
+    global $wpdb; 
+    
+    $table_prefix = $wpdb->prefix; 
+    
+//    echo $table_prefix; 
+    
+    $sql = "CREATE TABLE `{$table_prefix}emp_form_data` (
+          `id` int(50) NOT NULL AUTO_INCREMENT,
+          `name` varchar(120) DEFAULT NULL,
+          `email` varchar(80) DEFAULT NULL,
+          `phoneNo` varchar(50) DEFAULT NULL,
+          `gender` enum('male','female','other') DEFAULT NULL,
+          `designation` varchar(50) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+    
+    include_once ABSPATH. "wp-admin/includes/upgrade.php";
+    
+    dbDelta($sql);
+}
+
 ?>
